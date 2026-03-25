@@ -1,0 +1,71 @@
+---
+title: "Tutorial Week 2"
+format: html
+editor: visual
+---
+# Exercise 1
+# Reading Avian Influenza Data
+
+```{r, echo: true, warning: false, message: false} 
+#If you put this in a code chunk, it will affect only codes in that chunk, but if you but it in the YAML (Global option (rather than local option)), it will affect every code in the document.
+#| echo: true
+#| warning: false
+#| message: false
+
+library(tidyverse)
+dat <- read_csv("data/avian_influenza_numbers.csv")
+
+head(dat,10)
+
+#glimpse gives a snapshot of the dataset
+glimpse(dat)
+
+#str gives us the data structure e.g. variable type
+str(dat)
+
+#dim gives dimension of the dataset
+dim(dat)
+
+```
+The dataset has `r nrow(dat)` rows and `r ncol(dat)` columns
+`{r} nrow(dat)`
+
+### Why is it important to know the dimension of your dataset?
+To have a netter understanding of the data, verify your result and determine the complexity of your analysis/model.
+
+### What are the variable names in the dataset?
+```{r}
+names(dat)
+
+dat$China
+```
+- Month: The particular month and year that the infection is recorded.
+- China: Monthly count of influenza recorded in that particular year in China.
+ 
+ 
+# Exercise 4
+```{r}
+library(lubridate)
+data_cleaned <- dat |>
+  select(Month, Australia, Egypt, `United States`) |>
+  mutate(Month = dmy(Month)) |>
+  filter(!is.na(Month))
+         
+data_cleaned
+```
+```{r}
+data_cleaned |> summarise(count_aus = sum(Australia),
+            count_egy = sum(Egypt)) |> kable()
+```
+Visualize the case counts using a histogram.
+```{r}
+library(ggplot2)
+data_cleaned |> ggplot(aes(x = Egypt)) + geom_histogram(binwidth = 5)
+
+data_cleaned |> pivot_longer(-Month)
+
+# Plot multiple tgt
+
+data_cleaned |> pivot_longer(-Month) |> ggplot(aes(x = Egypt)) + geom_histogram(binwidth = 5)
+```
+
