@@ -4,4 +4,4 @@ git add . to add every unstaged changes or add specific file/folder e.g. add dat
 git commit -m "Add commit message"
 git push origin main >> this means the main branch
 
-This is a change I made on the feature branch.
+This line was edited on conflict-branch.
